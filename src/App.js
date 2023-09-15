@@ -1,4 +1,4 @@
-import Cell from './features/cell/Cell';
+import Cell from './components/Cell';
 import styles from './app.module.css';
 
 const App = () => {
