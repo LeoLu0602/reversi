@@ -20,8 +20,11 @@ export const boardSlice = createSlice({
         click: (state, action) => {
             const turn = action.payload.turn;
             const [row, col] = action.payload.coordinate;
+            const newState = JSON.parse(JSON.stringify(state));
 
-            state[row][col] = turn;
+            newState[row][col] = turn;
+            
+            return newState;
         }   
     }
 });

@@ -21,13 +21,11 @@ const App = () => {
         <div className={styles.app}>
             <h1 className={styles.header}>Reversi</h1>
             <div>{table}</div>
-            <h1 className={styles.turn}>
-                {
-                    turn === 1
-                    ? <span>Black's Turn</span>
-                    : <span className={styles.white}>White's Turn</span>
-                }               
-            </h1>
+            {
+                turn === 1
+                ? <h1>Black's Turn</h1>
+                : <h1 className={styles.white}>White's Turn</h1>
+            }               
         </div>
     );
 };
