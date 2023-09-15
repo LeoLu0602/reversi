@@ -18,20 +18,18 @@ const Cell = ({ row, col }) => {
     };
 
     return (
-        <td 
+        <div 
             className={styles.cell} 
             onClick={handleCellClick}
         >
-            <div className={styles.container}>
-                {
-                    cellStatus === 1
-                    ? <div className={styles.black} />
-                    : cellStatus === 2
-                    ? <div className={styles.white} />
-                    : <div />
-                }
-            </div>
-        </td>
+            {
+                cellStatus === 1
+                ? <div className={styles.black} />
+                : cellStatus === 2
+                ? <div className={styles.white} />
+                : <div />
+            }
+        </div>
     );
 };
 

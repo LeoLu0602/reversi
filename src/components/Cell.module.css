@@ -1,14 +1,15 @@
 .cell {
-    border: solid 3px black;
-    cursor: pointer;
-}
-
-.container {
     width: 60px;
     height: 60px;
+    cursor: pointer;
+    border-right: solid 2px black;
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.cell:first-child {
+    border-left: solid 2px black;
 }
 
 .black {

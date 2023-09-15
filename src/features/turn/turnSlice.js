@@ -1,6 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 // 1 for player1, 2 for player 2
+// player 1 uses black pieces
+// player 2 uses white pieces
 
 export const turnSlice = createSlice({
     name: 'turn',

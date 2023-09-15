@@ -12,11 +12,21 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    background-color: orangered;
 }
 
-.board {
+.row {
+    display: flex;
     width: 480px;
-    height: 480px;
-    border-collapse: collapse;
+    height: 60px;
     background-color: green;
+    border-bottom: solid 2px black;
+}
+
+.row:first-child {
+    border-top: solid 2px black;
+}
+
+.white {
+    color: white;
 }
