@@ -8,7 +8,7 @@ const App = () => {
         const row = [];
 
         for (let j = 0; j < 8; j++) {
-            row.push(<Cell key={j} />);
+            row.push(<Cell key={j} row={i} col={j} />);
         }
 
         table.push(<tr key={i}>{row}</tr>);

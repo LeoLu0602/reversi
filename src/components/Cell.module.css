@@ -2,3 +2,25 @@
     border: solid 3px black;
     cursor: pointer;
 }
+
+.container {
+    width: 60px;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.black {
+    width: 80%;
+    height: 80%;
+    border-radius: 50%;
+    background-color: black;
+}
+
+.white {
+    width: 80%;
+    height: 80%;
+    border-radius: 50%;
+    background-color: white;
+}
