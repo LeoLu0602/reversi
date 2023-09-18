@@ -141,62 +141,146 @@ const flipPieces = (board, move, turn) => {
     const [i, j] = move;
     const newBoard = board.slice();
     const oppositeTurn = toggleTurn(turn);
+    let piecesToFlip = [];
+    let tmp = []; // stores pieces that might be flipped
 
     newBoard[i][j] = turn;
 
     // ↑
     for (let k = 1; i - k >= 0; k++) {
-        if (newBoard[i - k][j] !== oppositeTurn) break;
-        newBoard[i - k][j] = turn;
+        const current = newBoard[i - k][j];
+        
+        if (current === oppositeTurn) {
+            tmp.push([i - k, j]);
+            continue;
+        }
+         
+        if (current === turn) piecesToFlip = [...piecesToFlip, ...tmp];
+
+        break;
     }
 
     // ↗
+    tmp = [];
+
     for (let k = 1; i - k >= 0 && j + k < 8; k++) {
-        if (newBoard[i - k][j + k] !== oppositeTurn) break;
-        newBoard[i - k][j + k] = turn;
+        const current = newBoard[i - k][j + k];
+        
+        if (current === oppositeTurn) {
+            tmp.push([i - k, j + k]);
+            continue;
+        }
+         
+        if (current === turn) piecesToFlip = [...piecesToFlip, ...tmp];
+
+        break;
     }
 
     // →
+    tmp = [];
+
     for (let k = 1; j + k < 8; k++) {
-        if (newBoard[i][j + k] !== oppositeTurn) break;
-        newBoard[i][j + k] = turn;
+        const current = newBoard[i][j + k];
+        
+        if (current === oppositeTurn) {
+            tmp.push([i, j + k]);
+            continue;
+        }
+         
+        if (current === turn) piecesToFlip = [...piecesToFlip, ...tmp];
+
+        break;
     }
 
     // ↘
+    tmp = [];
+
     for (let k = 1; i + k < 8 && j + k < 8; k++) {
-        if (newBoard[i + k][j + k] !== oppositeTurn) break;
-        newBoard[i + k][j + k] = turn;
+        const current = newBoard[i + k][j + k];
+        
+        if (current === oppositeTurn) {
+            tmp.push([i + k, j + k]);
+            continue;
+        }
+         
+        if (current === turn) piecesToFlip = [...piecesToFlip, ...tmp];
+
+        break;
     }
 
     // ↓
+    tmp = [];
+
     for (let k = 1; i + k < 8; k++) {
-        if (newBoard[i + k][j] !== oppositeTurn) break;
-        newBoard[i + k][j] = turn;
+        const current = newBoard[i + k][j];
+        
+        if (current === oppositeTurn) {
+            tmp.push([i + k, j]);
+            continue;
+        }
+         
+        if (current === turn) piecesToFlip = [...piecesToFlip, ...tmp];
+
+        break;
     }
 
     // ↙
+    tmp = [];
+
     for (let k = 1; i + k < 8 && j - k >= 0; k++) {
-        if (newBoard[i + k][j - k] !== oppositeTurn) break;
-        newBoard[i + k][j - k] = turn;
+        const current = newBoard[i + k][j - k];
+        
+        if (current === oppositeTurn) {
+            tmp.push([i + k, j - k]);
+            continue;
+        }
+         
+        if (current === turn) piecesToFlip = [...piecesToFlip, ...tmp];
+
+        break;
     }
 
     // ←
+    tmp = [];
+
     for (let k = 1; j - k >= 0; k++) {
-        if (newBoard[i][j - k] !== oppositeTurn) break;
-        newBoard[i][j - k] = turn;
+        const current = newBoard[i][j - k];
+        
+        if (current === oppositeTurn) {
+            tmp.push([i, j - k]);
+            continue;
+        }
+         
+        if (current === turn) piecesToFlip = [...piecesToFlip, ...tmp];
+
+        break;
     }
 
     // ↖
+    tmp = [];
+
     for (let k = 1; i - k >= 0 && j - k >= 0; k++) {
-        if (newBoard[i - k][j - k] !== oppositeTurn) break;
-        newBoard[i - k][j - k] = turn;
+        const current = newBoard[i - k][j - k];
+        
+        if (current === oppositeTurn) {
+            tmp.push([i - k, j - k]);
+            continue;
+        }
+         
+        if (current === turn) piecesToFlip = [...piecesToFlip, ...tmp];
+
+        break;
     }
+
+    piecesToFlip.forEach(([row, col]) => {
+        newBoard[row][col] = turn;
+    });
 
     return newBoard;
 };
 
-export const boardSlice = createSlice({
-    name: 'board',
+export const gameSlice = createSlice({
+    name: 'game',
     initialState: {
         board:
         [
@@ -210,7 +294,8 @@ export const boardSlice = createSlice({
             [0, 0, 0, 0, 0, 0, 0, 0]
         ],
         legalMoves: new Set([20, 29, 34, 43]),
-        turn: 1
+        turn: 1,
+        isGameEnd: false
     },
     reducers: {
         place: (state, action) => {
@@ -224,15 +309,30 @@ export const boardSlice = createSlice({
         nextPlayer: state => {
             const newState = JSON.parse(JSON.stringify(state));
             const oppositeTurn = toggleTurn(newState.turn);
+            const currentPlayerLegalMoves = calculateLegalMoves(newState.board, newState.turn);
+            const anotherPlayerLegalMoves = calculateLegalMoves(newState.board, oppositeTurn);
 
-            newState.legalMoves = calculateLegalMoves(newState.board, oppositeTurn);
-            newState.turn = oppositeTurn;
+            if (
+                currentPlayerLegalMoves.size === 0 && 
+                anotherPlayerLegalMoves.size === 0
+            ) {
+                newState.legalMoves = currentPlayerLegalMoves;
+                newState.isGameEnd = true;
+
+                return newState;
+            }
+
+            if (anotherPlayerLegalMoves.size > 0) newState.turn = oppositeTurn;
+
+            newState.legalMoves = anotherPlayerLegalMoves.size > 0 
+                                    ? anotherPlayerLegalMoves 
+                                    : currentPlayerLegalMoves;
 
             return newState;
         } 
     }
 });
 
-export const { place, nextPlayer } = boardSlice.actions;
+export const { place, nextPlayer } = gameSlice.actions;
 
-export default boardSlice.reducer;
+export default gameSlice.reducer;

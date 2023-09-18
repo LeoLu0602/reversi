@@ -1,13 +1,13 @@
 import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { place, nextPlayer } from '../features/board/boardSlice';
+import { place, nextPlayer } from '../features/game/gameSlice';
 import styles from './Cell.module.css';
 
 const Cell = ({ row, col }) => {
     const [isLegal, setIsLegal] = useState(false);
 
-    const cellStatus = useSelector(state => state.board.board[row][col]);
-    const legalMoves = useSelector(state => state.board.legalMoves);
+    const cellStatus = useSelector(state => state.game.board[row][col]);
+    const legalMoves = useSelector(state => state.game.legalMoves);
     
     const dispatch = useDispatch();
 
