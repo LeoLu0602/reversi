@@ -9,7 +9,7 @@ enableMapSet();
 
 const toggleTurn = turn => turn === 1 ? 2 : 1;
 
-const search = (board, i, j, turn) => {
+const searchLegalMoves = (board, i, j, turn) => {
     const oppositeTurn = toggleTurn(turn);
     const results = new Set();
 
@@ -129,12 +129,70 @@ const calculateLegalMoves = (board, turn) => {
 
             results = new Set([
                 ...results, 
-                ...search(board, i, j, turn)
+                ...searchLegalMoves(board, i, j, turn)
             ]);
         }
     }
 
     return results;
+};
+
+const flipPieces = (board, move, turn) => {
+    const [i, j] = move;
+    const newBoard = board.slice();
+    const oppositeTurn = toggleTurn(turn);
+
+    newBoard[i][j] = turn;
+
+    // ↑
+    for (let k = 1; i - k >= 0; k++) {
+        if (newBoard[i - k][j] !== oppositeTurn) break;
+        newBoard[i - k][j] = turn;
+    }
+
+    // ↗
+    for (let k = 1; i - k >= 0 && j + k < 8; k++) {
+        if (newBoard[i - k][j + k] !== oppositeTurn) break;
+        newBoard[i - k][j + k] = turn;
+    }
+
+    // →
+    for (let k = 1; j + k < 8; k++) {
+        if (newBoard[i][j + k] !== oppositeTurn) break;
+        newBoard[i][j + k] = turn;
+    }
+
+    // ↘
+    for (let k = 1; i + k < 8 && j + k < 8; k++) {
+        if (newBoard[i + k][j + k] !== oppositeTurn) break;
+        newBoard[i + k][j + k] = turn;
+    }
+
+    // ↓
+    for (let k = 1; i + k < 8; k++) {
+        if (newBoard[i + k][j] !== oppositeTurn) break;
+        newBoard[i + k][j] = turn;
+    }
+
+    // ↙
+    for (let k = 1; i + k < 8 && j - k >= 0; k++) {
+        if (newBoard[i + k][j - k] !== oppositeTurn) break;
+        newBoard[i + k][j - k] = turn;
+    }
+
+    // ←
+    for (let k = 1; j - k >= 0; k++) {
+        if (newBoard[i][j - k] !== oppositeTurn) break;
+        newBoard[i][j - k] = turn;
+    }
+
+    // ↖
+    for (let k = 1; i - k >= 0 && j - k >= 0; k++) {
+        if (newBoard[i - k][j - k] !== oppositeTurn) break;
+        newBoard[i - k][j - k] = turn;
+    }
+
+    return newBoard;
 };
 
 export const boardSlice = createSlice({
@@ -159,7 +217,7 @@ export const boardSlice = createSlice({
             const newState = JSON.parse(JSON.stringify(state));
             const [row, col] = action.payload.coordinate;
 
-            newState.board[row][col] = state.turn;
+            newState.board = flipPieces(newState.board, [row, col], newState.turn);
             
             return newState;
         },
