@@ -3,7 +3,7 @@ import Cell from './components/Cell';
 import styles from './app.module.css';
 
 const App = () => {
-    const turn = useSelector(state => state.turn);
+    const turn = useSelector(state => state.board.turn);
 
     const table = [];
 

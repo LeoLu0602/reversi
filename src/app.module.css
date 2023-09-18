@@ -20,11 +20,6 @@
     width: 480px;
     height: 60px;
     background-color: green;
-    border-bottom: solid 2px black;
-}
-
-.row:first-child {
-    border-top: solid 2px black;
 }
 
 .white {
