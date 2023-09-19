@@ -281,6 +281,19 @@ const flipPieces = (board, move, turn) => {
     return newBoard;
 };
 
+const calculateScores = (board) => {
+    const scores = [0, 0];
+
+    for (let i = 0; i < 8; i++) {
+        for (let j = 0; j < 8; j++) {
+            if (board[i][j] === 1) scores[0]++;
+            else if (board[i][j] === 2) scores[1]++;
+        }
+    }
+
+    return scores;
+};
+
 export const gameSlice = createSlice({
     name: 'game',
     initialState: {
@@ -297,7 +310,8 @@ export const gameSlice = createSlice({
         ],
         legalMoves: [19, 37, 44, 26],
         turn: 1,
-        isGameEnd: false
+        isGameEnd: false,
+        scores: [2, 2]
     },
     reducers: {
         place: (state, action) => {
@@ -311,6 +325,8 @@ export const gameSlice = createSlice({
         nextPlayer: state => {
             const newState = JSON.parse(JSON.stringify(state));
             const oppositeTurn = toggleTurn(newState.turn);
+
+            newState.scores = calculateScores(newState.board);
 
             // another player has legal moves
 
@@ -359,6 +375,7 @@ export const gameSlice = createSlice({
             newState.legalMoves = [19, 37, 44, 26];
             newState.turn = 1;
             newState.isGameEnd = false;
+            newState.scores = [2, 2];
             
             return newState;
         }, 

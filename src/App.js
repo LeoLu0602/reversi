@@ -10,6 +10,7 @@ const App = () => {
 
     const turn = useSelector(state => state.game.turn);
     const isGameEnd = useSelector(state => state.game.isGameEnd);
+    const scores = useSelector(state => state.game.scores);
 
     const dispatch = useDispatch();
 
@@ -47,12 +48,16 @@ const App = () => {
     return (
         <div className={styles.app}>
             <GameOver restart={restart} />
-            <h1 className={styles.header}>Reversi</h1>
+            <div className={styles.headerFooter}>Reversi</div>
+            <div className={styles.scoresBar}>
+                <div>{scores[0] > 0 ? scores[0] : ''}</div>
+                <div>{scores[1] > 0 ? scores[1] : ''}</div>
+            </div>
             <div>{table}</div>
             {
                 turn === 1
-                ? <h1>Black's Turn</h1>
-                : <h1 className={styles.white}>White's Turn</h1>
+                ? <div className={styles.headerFooter}>Black's Turn</div>
+                : <div className={`${styles.headerFooter} ${styles.white}`}>White's Turn</div>
             }               
         </div>
     );
