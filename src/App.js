@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { reset } from './features/game/gameSlice';
 import Cell from './components/Cell';
+import GameOver from './components/GameOver';
 import styles from './app.module.css';
 
 const App = () => {
@@ -18,17 +19,25 @@ const App = () => {
         const row = [];
 
         for (let j = 0; j < 8; j++) {
-            row.push(<Cell key={j} row={i} col={j} />);
+            row.push (<Cell key={j} row={i} col={j} />);
         }
 
         table.push(<div key={i} className={styles.row}>{row}</div>);
     }
 
-    const handleGameOver = () => {
-        setGameOverMsgShown(true);
-        alert('GAME OVER');
+    const restart = () => {
+        const modal = document.querySelector('.GameOver_modal__IdKYN');
+
+        modal.style.display = 'none';
         setGameOverMsgShown(false);
         dispatch(reset());
+    };
+
+    const handleGameOver = () => {
+        const modal = document.querySelector('.GameOver_modal__IdKYN');
+
+        setGameOverMsgShown(true);
+        modal.style.display = 'flex';
     };
 
     useEffect(() => {
@@ -37,6 +46,7 @@ const App = () => {
 
     return (
         <div className={styles.app}>
+            <GameOver restart={restart} />
             <h1 className={styles.header}>Reversi</h1>
             <div>{table}</div>
             {
