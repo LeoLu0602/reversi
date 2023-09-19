@@ -1,11 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { enableMapSet } from 'immer';
 
-enableMapSet();
-
 // board[i][j] === 0: row i col j is not occupied
 // board[i][j] === 1: row i col j is occupied by player 1
 // board[i][j] === 2: row i col j is occupied by player 2
+
+enableMapSet();
 
 const toggleTurn = turn => turn === 1 ? 2 : 1;
 
@@ -133,6 +133,8 @@ const calculateLegalMoves = (board, turn) => {
             ]);
         }
     }
+
+    results = Array.from(results);
 
     return results;
 };
@@ -293,7 +295,7 @@ export const gameSlice = createSlice({
             [0, 0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0, 0]
         ],
-        legalMoves: new Set([20, 29, 34, 43]),
+        legalMoves: [20, 29, 34, 43],
         turn: 1,
         isGameEnd: false
     },
@@ -309,30 +311,60 @@ export const gameSlice = createSlice({
         nextPlayer: state => {
             const newState = JSON.parse(JSON.stringify(state));
             const oppositeTurn = toggleTurn(newState.turn);
-            const currentPlayerLegalMoves = calculateLegalMoves(newState.board, newState.turn);
+
+            // another player has legal moves
+
             const anotherPlayerLegalMoves = calculateLegalMoves(newState.board, oppositeTurn);
 
-            if (
-                currentPlayerLegalMoves.size === 0 && 
-                anotherPlayerLegalMoves.size === 0
-            ) {
-                newState.legalMoves = currentPlayerLegalMoves;
-                newState.isGameEnd = true;
+            if (anotherPlayerLegalMoves.length > 0) {
+                newState.legalMoves = anotherPlayerLegalMoves;
+                newState.turn = oppositeTurn;
 
                 return newState;
             }
 
-            if (anotherPlayerLegalMoves.size > 0) newState.turn = oppositeTurn;
+            // another player does not have legal moves
+            // current player has legal moves
 
-            newState.legalMoves = anotherPlayerLegalMoves.size > 0 
-                                    ? anotherPlayerLegalMoves 
-                                    : currentPlayerLegalMoves;
+            const currentPlayerLegalMoves = calculateLegalMoves(newState.board, newState.turn);
+
+            if (currentPlayerLegalMoves.length > 0) {
+                newState.legalMoves = currentPlayerLegalMoves;
+                
+                return newState;
+            }
+
+            // no player has legal moves
+            // game over
+
+            newState.legalMoves = [];
+            newState.isGameEnd = true;
 
             return newState;
-        } 
+        },
+        reset: state => {
+            const newState = JSON.parse(JSON.stringify(state));
+            
+            newState.board = [
+                [0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 1, 2, 0, 0, 0],
+                [0, 0, 0, 2, 1, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0]
+            ];
+
+            newState.legalMoves = [20, 29, 34, 43];
+            newState.turn = 1;
+            newState.isGameEnd = false;
+            
+            return newState;
+        }, 
     }
 });
 
-export const { place, nextPlayer } = gameSlice.actions;
+export const { place, nextPlayer, reset } = gameSlice.actions;
 
 export default gameSlice.reducer;
