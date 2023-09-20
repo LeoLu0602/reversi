@@ -21,6 +21,7 @@
     flex-direction: column;
     justify-content: space-around;
     align-items: center;
+    border-radius: 15px;
 }
 
 .result {
@@ -29,11 +30,19 @@
 
 .box button {
     width: 50%;
-    height: 36px;
+    height: 40px;
     font-weight: bold;
     font-size: 24px;
     color: white;
     background-color: green;
     border-width: 0;
     cursor: pointer;
+    border-radius: 15px;
+    box-shadow: 0 3px 3px black;
+    transition: 0.2s background-color;
+}
+
+.box button:hover {
+    transform: translateY(3px);
+    background-color: royalblue;
 }
