@@ -8,7 +8,6 @@ const Cell = ({ row, col }) => {
 
     const cellStatus = useSelector(state => state.game.board[row][col]);
     const legalMoves = useSelector(state => state.game.legalMoves);
-    const scores = useSelector(state => state.game.scores);
     
     const dispatch = useDispatch();
 
@@ -21,14 +20,6 @@ const Cell = ({ row, col }) => {
         
         dispatch(nextPlayer());
     };
-
-    useEffect(() => {
-        const black = document.querySelector('.app_scoresBar__VAvbB div:nth-child(1)');
-        const white = document.querySelector('.app_scoresBar__VAvbB div:nth-child(2)');
-
-        black.style.width = `${scores[0] / 64 * 100}%`;
-        white.style.width = `${scores[1] / 64 * 100}%`;
-    }, [scores]);
 
     useEffect(() => {
         const legalMovesSet = new Set(legalMoves);

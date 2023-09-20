@@ -42,6 +42,14 @@ const App = () => {
     };
 
     useEffect(() => {
+        const black = document.querySelector('.app_scoresBar__VAvbB div:nth-child(1)');
+        const white = document.querySelector('.app_scoresBar__VAvbB div:nth-child(2)');
+
+        black.style.width = `${scores[0] / 64 * 100}%`;
+        white.style.width = `${scores[1] / 64 * 100}%`;
+    }, [scores]);
+
+    useEffect(() => {
         if (isGameEnd && !gameOverMsgShown) handleGameOver(); 
     }, [isGameEnd]);
 
