@@ -48,12 +48,26 @@ const App = () => {
     return (
         <div className={styles.app}>
             <GameOver restart={restart} />
-            <div className={styles.headerFooter}>Reversi</div>
-            <div className={styles.scoresBar}>
-                <div>{scores[0] > 0 ? scores[0] : ''}</div>
-                <div>{scores[1] > 0 ? scores[1] : ''}</div>
+
+            <div className={`${styles.headerFooter} ${styles.white}`}>Reversi</div>
+
+            <div className={styles.container}>
+                <div className={styles.score}>
+                    {scores[0]}
+                </div>
+
+                <div className={styles.scoresBar}>
+                    <div className={styles.blackBar} />
+                    <div className={styles.whiteBar} />
+                </div>
+
+                <div className={`${styles.score} ${styles.white}`}>
+                    {scores[1]}
+                </div>
             </div>
-            <div>{table}</div>
+
+            <div className={styles.board}>{table}</div>
+
             {
                 turn === 1
                 ? <div className={styles.headerFooter}>Black's Turn</div>

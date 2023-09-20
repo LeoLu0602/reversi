@@ -12,7 +12,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: orangered;
+    background-color: red;
 }
 
 .headerFooter {
@@ -21,10 +21,25 @@
     font-size: 24px;
 }
 
-.scoresBar {
+.container {
     display: flex;
     width: 480px;
-    height: 32px;
+    height: 30px;
+    margin-bottom: 20px;
+    justify-content: space-around;
+}
+
+.score {
+    display: flex;
+    align-items: center;
+    font-weight: bold;
+    font-size: 24px;
+}
+
+.scoresBar {
+    display: flex;
+    width: 80%;
+    height: 100%;
     margin-bottom: 10px;
     font-weight: bold;
     font-size: 16px;
@@ -32,20 +47,25 @@
     background-color: green;
 }
 
-.scoresBar div:nth-child(1) {
-    color: white;
+.blackBar {
     background-color: black;
     display: flex;
     justify-content: center;
     align-items: center;
+    transition: 0.5s width;
 }
 
-.scoresBar div:nth-child(2) {
+.whiteBar {
     background-color: white;
     text-align: center;
     display: flex;
     justify-content: center;
     align-items: center;
+    transition: 0.5s width;
+}
+
+.board {
+    border: solid 4px black;
 }
 
 .row {
