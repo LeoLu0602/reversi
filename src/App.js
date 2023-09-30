@@ -6,8 +6,6 @@ import GameOver from './components/GameOver';
 import styles from './app.module.css';
 
 const App = () => {
-    const [gameOverMsgShown, setGameOverMsgShown] = useState(false);
-
     const turn = useSelector(state => state.game.turn);
     const isGameEnd = useSelector(state => state.game.isGameEnd);
     const scores = useSelector(state => state.game.scores);
@@ -30,14 +28,11 @@ const App = () => {
         const modal = document.querySelector('.GameOver_modal__IdKYN');
 
         modal.style.display = 'none';
-        setGameOverMsgShown(false);
         dispatch(reset());
     };
 
     const handleGameOver = () => {
         const modal = document.querySelector('.GameOver_modal__IdKYN');
-
-        setGameOverMsgShown(true);
         modal.style.display = 'flex';
     };
 
@@ -50,7 +45,7 @@ const App = () => {
     }, [scores]);
 
     useEffect(() => {
-        if (isGameEnd && !gameOverMsgShown) handleGameOver(); 
+        if (isGameEnd) handleGameOver(); 
     }, [isGameEnd]);
 
     return (
